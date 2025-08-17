@@ -14,6 +14,9 @@ public class LeBron {
         
         while (true) {
             input = scanner.nextLine();
+            if (input.trim().isEmpty()) {
+                continue;
+            }
             if (input.equals("bye")) {
                 break;
             } else if (input.equals("list")) {
