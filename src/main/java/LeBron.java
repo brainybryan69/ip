@@ -22,7 +22,7 @@ public class LeBron {
                 } else {
                     System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < taskCount; i++) {
-                        System.out.println((i + 1) + "." + tasks[i].getStatusIcon() + " " + tasks[i].getDescription());
+                        System.out.println((i + 1) + "." + tasks[i].getTypeIcon() + tasks[i].getStatusIcon() + " " + tasks[i].getFullDescription());
                     }
                 }
             } else if (input.startsWith("mark ")) {
@@ -49,10 +49,49 @@ public class LeBron {
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid task number.");
                 }
-            } else {
-                tasks[taskCount] = new Task(input);
+            } else if (input.startsWith("todo ")) {
+                String description = input.substring(5);
+                tasks[taskCount] = new ToDo(description);
                 taskCount++;
-                System.out.println("added: " + input);
+                System.out.println("Got it. I've added this task:");
+                System.out.println(tasks[taskCount-1].getTypeIcon() + tasks[taskCount-1].getStatusIcon() + " " + tasks[taskCount-1].getFullDescription());
+                System.out.println("Now you have " + taskCount + " tasks in the list.");
+            } else if (input.startsWith("deadline ")) {
+                String remaining = input.substring(9);
+                int byIndex = remaining.indexOf(" /by ");
+                if (byIndex != -1) {
+                    String description = remaining.substring(0, byIndex);
+                    String by = remaining.substring(byIndex + 5);
+                    tasks[taskCount] = new Deadline(description, by);
+                    taskCount++;
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println(tasks[taskCount-1].getTypeIcon() + tasks[taskCount-1].getStatusIcon() + " " + tasks[taskCount-1].getFullDescription());
+                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                } else {
+                    System.out.println("Please specify a deadline with /by");
+                }
+            } else if (input.startsWith("event ")) {
+                String remaining = input.substring(6);
+                int fromIndex = remaining.indexOf(" /from ");
+                int toIndex = remaining.indexOf(" /to ");
+                if (fromIndex != -1 && toIndex != -1) {
+                    String description = remaining.substring(0, fromIndex);
+                    String from = remaining.substring(fromIndex + 7, toIndex);
+                    String to = remaining.substring(toIndex + 5);
+                    tasks[taskCount] = new Event(description, from, to);
+                    taskCount++;
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println(tasks[taskCount-1].getTypeIcon() + tasks[taskCount-1].getStatusIcon() + " " + tasks[taskCount-1].getFullDescription());
+                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                } else {
+                    System.out.println("Please specify event time with /from and /to");
+                }
+            } else {
+                tasks[taskCount] = new ToDo(input);
+                taskCount++;
+                System.out.println("Got it. I've added this task:");
+                System.out.println(tasks[taskCount-1].getTypeIcon() + tasks[taskCount-1].getStatusIcon() + " " + tasks[taskCount-1].getFullDescription());
+                System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
         }
         
