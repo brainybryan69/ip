@@ -1,10 +1,10 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class LeBron {
     public static void main(String[] args) {
         final String NAME = "LeBron";
-        Task[] tasks = new Task[100];
-        int taskCount = 0;
+        ArrayList<Task> tasks = new ArrayList<>();
 
         System.out.println("Hello! I'm " + NAME);
         System.out.println("What can I do for you?");
@@ -21,22 +21,22 @@ public class LeBron {
                 if (input.equals("bye")) {
                     break;
                 } else if (input.equals("list")) {
-                if (taskCount == 0) {
+                if (tasks.size() == 0) {
                     System.out.println("No tasks found.");
                 } else {
                     System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < taskCount; i++) {
-                        System.out.println((i + 1) + "." + tasks[i].getTypeIcon() + tasks[i].getStatusIcon() + " " + tasks[i].getFullDescription());
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println((i + 1) + "." + tasks.get(i).getTypeIcon() + tasks.get(i).getStatusIcon() + " " + tasks.get(i).getFullDescription());
                     }
                 }
             } else if (input.startsWith("mark ")) {
                 try {
                     int taskNumber = Integer.parseInt(input.substring(5));
                     int taskIndex = taskNumber - 1;
-                    if (taskNumber <= 0 || taskIndex >= taskCount) {
+                    if (taskNumber <= 0 || taskIndex >= tasks.size()) {
                         throw new LeBronException("Invalid task number.");
                     }
-                    Task task = tasks[taskIndex];
+                    Task task = tasks.get(taskIndex);
                     task.markAsDone();
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.println(task.getStatusIcon() + " " + task.getDescription());
@@ -47,13 +47,27 @@ public class LeBron {
                 try {
                     int taskNumber = Integer.parseInt(input.substring(7));
                     int taskIndex = taskNumber - 1;
-                    if (taskNumber <= 0 || taskIndex >= taskCount) {
+                    if (taskNumber <= 0 || taskIndex >= tasks.size()) {
                         throw new LeBronException("Invalid task number.");
                     }
-                    Task task = tasks[taskIndex];
+                    Task task = tasks.get(taskIndex);
                     task.markAsNotDone();
                     System.out.println("OK, I've marked this task as not done yet:");
                     System.out.println(task.getStatusIcon() + " " + task.getDescription());
+                } catch (NumberFormatException e) {
+                    throw new LeBronException("Invalid task number.");
+                }
+            } else if (input.startsWith("delete ")) {
+                try {
+                    int taskNumber = Integer.parseInt(input.substring(7));
+                    int taskIndex = taskNumber - 1;
+                    if (taskNumber <= 0 || taskIndex >= tasks.size()) {
+                        throw new LeBronException("Invalid task number.");
+                    }
+                    Task removedTask = tasks.remove(taskIndex);
+                    System.out.println("Noted. I've removed the task:");
+                    System.out.println(removedTask.getTypeIcon() + removedTask.getStatusIcon() + " " + removedTask.getFullDescription());
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                 } catch (NumberFormatException e) {
                     throw new LeBronException("Invalid task number.");
                 }
@@ -62,11 +76,10 @@ public class LeBron {
                 if (description.isEmpty()) {
                     throw new LeBronException("The description of a todo cannot be empty.");
                 }
-                tasks[taskCount] = new ToDo(description);
-                taskCount++;
+                tasks.add(new ToDo(description));
                 System.out.println("Got it. I've added this task:");
-                System.out.println(tasks[taskCount-1].getTypeIcon() + tasks[taskCount-1].getStatusIcon() + " " + tasks[taskCount-1].getFullDescription());
-                System.out.println("Now you have " + taskCount + " tasks in the list.");
+                System.out.println(tasks.get(tasks.size()-1).getTypeIcon() + tasks.get(tasks.size()-1).getStatusIcon() + " " + tasks.get(tasks.size()-1).getFullDescription());
+                System.out.println("Now you have " + tasks.size() + " tasks in the list.");
             } else if (input.equals("deadline") || input.startsWith("deadline ")) {
                 String remaining = input.length() > 8 ? input.substring(9) : "";
                 if (remaining.trim().isEmpty()) {
@@ -79,11 +92,10 @@ public class LeBron {
                         throw new LeBronException("The description of a deadline cannot be empty.");
                     }
                     String by = remaining.substring(byIndex + 5);
-                    tasks[taskCount] = new Deadline(description, by);
-                    taskCount++;
+                    tasks.add(new Deadline(description, by));
                     System.out.println("Got it. I've added this task:");
-                    System.out.println(tasks[taskCount-1].getTypeIcon() + tasks[taskCount-1].getStatusIcon() + " " + tasks[taskCount-1].getFullDescription());
-                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                    System.out.println(tasks.get(tasks.size()-1).getTypeIcon() + tasks.get(tasks.size()-1).getStatusIcon() + " " + tasks.get(tasks.size()-1).getFullDescription());
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                 } else {
                     throw new LeBronException("Please specify a deadline with /by");
                 }
@@ -101,11 +113,10 @@ public class LeBron {
                     }
                     String from = remaining.substring(fromIndex + 7, toIndex);
                     String to = remaining.substring(toIndex + 5);
-                    tasks[taskCount] = new Event(description, from, to);
-                    taskCount++;
+                    tasks.add(new Event(description, from, to));
                     System.out.println("Got it. I've added this task:");
-                    System.out.println(tasks[taskCount-1].getTypeIcon() + tasks[taskCount-1].getStatusIcon() + " " + tasks[taskCount-1].getFullDescription());
-                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                    System.out.println(tasks.get(tasks.size()-1).getTypeIcon() + tasks.get(tasks.size()-1).getStatusIcon() + " " + tasks.get(tasks.size()-1).getFullDescription());
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                 } else {
                     throw new LeBronException("Please specify event time with /from and /to");
                 }
