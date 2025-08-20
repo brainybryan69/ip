@@ -1,14 +1,34 @@
+/**
+ * All the different commands that users can type.
+ * Helps figure out what the user wants to do based on their input.
+ */
 public enum CommandType {
+    /** Exit the program */
     BYE,
+    /** Show all tasks */
     LIST,
+    /** Mark a task as done */
     MARK,
+    /** Mark a task as not done */
     UNMARK,
+    /** Remove a task completely */
     DELETE,
+    /** Add a simple todo task */
     TODO,
+    /** Add a task with a deadline */
     DEADLINE,
+    /** Add a task with start and end times */
     EVENT,
+    /** Command we don't recognize */
     UNKNOWN;
     
+    /**
+     * Figures out what command the user typed.
+     * Looks at the beginning of their input to determine the command type.
+     * 
+     * @param input what the user typed
+     * @return the type of command they want to run
+     */
     public static CommandType parseCommand(String input) {
         if (input.equals("bye")) {
             return BYE;
