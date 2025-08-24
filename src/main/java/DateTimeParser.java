@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -16,6 +17,9 @@ public class DateTimeParser {
     
     // Storage format: ISO format for file storage
     private static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    
+    // Date only format: yyyy-mm-dd (for ON command)
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
     /**
      * Parses a date/time string into a LocalDateTime object.
@@ -72,6 +76,26 @@ public class DateTimeParser {
             return LocalDateTime.parse(storedDateTime, STORAGE_FORMAT);
         } catch (DateTimeParseException e) {
             throw new LeBronException("Corrupted date/time data in storage");
+        }
+    }
+    
+    /**
+     * Parses a date string into a LocalDate object.
+     * Accepts format: yyyy-mm-dd (e.g., "2019-12-02")
+     * 
+     * @param dateString the date string to parse
+     * @return the parsed LocalDate
+     * @throws LeBronException if the format is invalid
+     */
+    public static LocalDate parseDate(String dateString) throws LeBronException {
+        if (dateString == null || dateString.trim().isEmpty()) {
+            throw new LeBronException("Date cannot be empty");
+        }
+        
+        try {
+            return LocalDate.parse(dateString.trim(), DATE_FORMAT);
+        } catch (DateTimeParseException e) {
+            throw new LeBronException("Invalid date format. Use yyyy-mm-dd (e.g., 2019-12-02)");
         }
     }
 }

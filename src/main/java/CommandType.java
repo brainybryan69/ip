@@ -19,6 +19,8 @@ public enum CommandType {
     DEADLINE,
     /** Add a task with start and end times */
     EVENT,
+    /** Show tasks occurring on a specific date */
+    ON,
     /** Command we don't recognize */
     UNKNOWN;
     
@@ -46,6 +48,8 @@ public enum CommandType {
             return DEADLINE;
         } else if (input.equals("event") || input.startsWith("event ")) {
             return EVENT;
+        } else if (input.equals("on") || input.startsWith("on ")) {
+            return ON;
         } else {
             return UNKNOWN;
         }

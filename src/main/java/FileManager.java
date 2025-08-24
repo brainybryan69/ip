@@ -121,7 +121,8 @@ public class FileManager {
             Deadline deadline = (Deadline) task;
             sb.append("|").append(DateTimeParser.formatForStorage(deadline.getBy()));
         } else if (task instanceof Event) {
-            sb.append("|").append(getEventFrom(task)).append("|").append(getEventTo(task));
+            Event event = (Event) task;
+            sb.append("|").append(DateTimeParser.formatForStorage(event.getFrom())).append("|").append(DateTimeParser.formatForStorage(event.getTo()));
         }
         
         return sb.toString();
@@ -210,7 +211,14 @@ public class FileManager {
                     System.out.println("Warning: Line " + lineNumber + " - Event has empty time fields");
                     return null;
                 }
-                task = new Event(description, from, to);
+                try {
+                    LocalDateTime fromDateTime = DateTimeParser.parseFromStorage(from);
+                    LocalDateTime toDateTime = DateTimeParser.parseFromStorage(to);
+                    task = new Event(description, fromDateTime, toDateTime);
+                } catch (LeBronException e) {
+                    System.out.println("Warning: Line " + lineNumber + " - Invalid date format in event: " + e.getMessage());
+                    return null;
+                }
                 break;
             }
             
@@ -247,30 +255,4 @@ public class FileManager {
         return status.equals("0") || status.equals("1");
     }
     
-    
-    /**
-     * Gets the start time from an event task.
-     * 
-     * @param task the event task
-     * @return the start time
-     */
-    private String getEventFrom(Task task) {
-        String fullDesc = task.getFullDescription();
-        int fromStart = fullDesc.indexOf("(from: ") + 7;
-        int fromEnd = fullDesc.indexOf(" to: ");
-        return fullDesc.substring(fromStart, fromEnd);
-    }
-    
-    /**
-     * Gets the end time from an event task.
-     * 
-     * @param task the event task
-     * @return the end time
-     */
-    private String getEventTo(Task task) {
-        String fullDesc = task.getFullDescription();
-        int toStart = fullDesc.indexOf(" to: ") + 5;
-        int toEnd = fullDesc.lastIndexOf(")");
-        return fullDesc.substring(toStart, toEnd);
-    }
 }
