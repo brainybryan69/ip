@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.IOException;
 
 /**
  * A personal task manager that helps you keep track of your todos, deadlines, and events.
@@ -19,6 +20,14 @@ public class LeBron {
     public static void main(String[] args) {
         final String NAME = "LeBron";
         ArrayList<Task> tasks = new ArrayList<>();
+        FileManager fileManager = new FileManager();
+        
+        // Load tasks from file when starting up
+        try {
+            tasks = fileManager.loadTasks();
+        } catch (IOException e) {
+            System.out.println("Could not load saved tasks.");
+        }
 
         System.out.println("Hello! I'm " + NAME);
         System.out.println("What can I do for you?");
@@ -61,6 +70,7 @@ public class LeBron {
                             task.markAsDone();
                             System.out.println("Nice! I've marked this task as done:");
                             System.out.println(task.getStatusIcon() + " " + task.getDescription());
+                            autoSave(fileManager, tasks);
                         } catch (NumberFormatException e) {
                             throw new LeBronException(ErrorType.INVALID_TASK_NUMBER.getMessage());
                         }
@@ -76,6 +86,7 @@ public class LeBron {
                             task.markAsNotDone();
                             System.out.println("OK, I've marked this task as not done yet:");
                             System.out.println(task.getStatusIcon() + " " + task.getDescription());
+                            autoSave(fileManager, tasks);
                         } catch (NumberFormatException e) {
                             throw new LeBronException(ErrorType.INVALID_TASK_NUMBER.getMessage());
                         }
@@ -91,6 +102,7 @@ public class LeBron {
                             System.out.println("Noted. I've removed the task:");
                             System.out.println(removedTask.getTypeIcon() + removedTask.getStatusIcon() + " " + removedTask.getFullDescription());
                             System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                            autoSave(fileManager, tasks);
                         } catch (NumberFormatException e) {
                             throw new LeBronException(ErrorType.INVALID_TASK_NUMBER.getMessage());
                         }
@@ -104,6 +116,7 @@ public class LeBron {
                         System.out.println("Got it. I've added this task:");
                         System.out.println(tasks.get(tasks.size()-1).getTypeIcon() + tasks.get(tasks.size()-1).getStatusIcon() + " " + tasks.get(tasks.size()-1).getFullDescription());
                         System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                        autoSave(fileManager, tasks);
                         break;
                     case DEADLINE:
                         String deadlineRemaining = input.length() > 8 ? input.substring(9) : "";
@@ -121,6 +134,7 @@ public class LeBron {
                             System.out.println("Got it. I've added this task:");
                             System.out.println(tasks.get(tasks.size()-1).getTypeIcon() + tasks.get(tasks.size()-1).getStatusIcon() + " " + tasks.get(tasks.size()-1).getFullDescription());
                             System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                            autoSave(fileManager, tasks);
                         } else {
                             throw new LeBronException(ErrorType.MISSING_DEADLINE_FORMAT.getMessage());
                         }
@@ -143,6 +157,7 @@ public class LeBron {
                             System.out.println("Got it. I've added this task:");
                             System.out.println(tasks.get(tasks.size()-1).getTypeIcon() + tasks.get(tasks.size()-1).getStatusIcon() + " " + tasks.get(tasks.size()-1).getFullDescription());
                             System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                            autoSave(fileManager, tasks);
                         } else {
                             throw new LeBronException(ErrorType.MISSING_EVENT_FORMAT.getMessage());
                         }
@@ -159,5 +174,20 @@ public class LeBron {
         
         System.out.println("Bye. Hope to see you again soon!");
         scanner.close();
+    }
+    
+    /**
+     * Saves tasks to the hard disk automatically.
+     * Called after every change to the task list.
+     * 
+     * @param fileManager the file manager to use for saving
+     * @param tasks the current list of tasks
+     */
+    private static void autoSave(FileManager fileManager, ArrayList<Task> tasks) {
+        try {
+            fileManager.saveTasks(tasks);
+        } catch (IOException e) {
+            System.out.println("Could not save tasks to file.");
+        }
     }
 }
