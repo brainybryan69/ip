@@ -10,3 +10,5 @@ T|0|test refactored code
 D|0|final test|2025-08-30T21:00:00
 E|0|celebration|2025-08-30T19:00:00|2025-08-30T22:00:00
 T|0|test packages
+D|0|final multi-package test|2025-08-31T15:00:00
+E|0|package party|2025-08-31T18:00:00|2025-08-31T21:00:00

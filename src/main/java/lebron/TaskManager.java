@@ -1,4 +1,11 @@
 package lebron;
+
+import lebron.task.TaskList;
+import lebron.ui.Ui;
+import lebron.ui.Parser;
+import lebron.storage.Storage;
+import lebron.command.*;
+import lebron.common.*;
 import java.util.Scanner;
 
 /**
@@ -70,7 +77,7 @@ public class TaskManager {
      * @throws LeBronException if the command is invalid or malformed
      */
     private Command parseCommand(String input) throws LeBronException {
-        CommandType commandType = Parser.parseCommand(input);
+        lebron.common.CommandType commandType = Parser.parseCommand(input);
         
         switch (commandType) {
         case BYE:
