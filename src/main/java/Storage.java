@@ -43,4 +43,13 @@ public class Storage {
     public void save(ArrayList<Task> tasks) throws IOException {
         fileManager.saveTasks(tasks);
     }
+    
+    /**
+     * Gets the underlying FileManager for backward compatibility.
+     * 
+     * @return the FileManager instance
+     */
+    public FileManager getFileManager() {
+        return fileManager;
+    }
 }
