@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.IOException;
+import java.time.LocalDate;
 
 /**
  * A personal task manager that helps you keep track of your todos, deadlines, and events.
@@ -157,13 +158,56 @@ public class LeBron {
                             }
                             String from = eventRemaining.substring(fromIndex + 7, toIndex);
                             String to = eventRemaining.substring(toIndex + 5);
-                            tasks.add(new Event(eventDescription, from, to));
-                            System.out.println("Got it. I've added this task:");
-                            System.out.println(tasks.get(tasks.size()-1).getTypeIcon() + tasks.get(tasks.size()-1).getStatusIcon() + " " + tasks.get(tasks.size()-1).getFullDescription());
-                            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                            autoSave(fileManager, tasks);
+                            try {
+                                tasks.add(new Event(eventDescription, from, to));
+                                System.out.println("Got it. I've added this task:");
+                                System.out.println(tasks.get(tasks.size()-1).getTypeIcon() + tasks.get(tasks.size()-1).getStatusIcon() + " " + tasks.get(tasks.size()-1).getFullDescription());
+                                System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                                autoSave(fileManager, tasks);
+                            } catch (LeBronException e) {
+                                throw new LeBronException(e.getMessage());
+                            }
                         } else {
                             throw new LeBronException(ErrorType.MISSING_EVENT_FORMAT.getMessage());
+                        }
+                        break;
+                    case ON:
+                        String onRemaining = input.length() > 2 ? input.substring(3).trim() : "";
+                        if (onRemaining.isEmpty()) {
+                            throw new LeBronException("Please specify a date. Use: on yyyy-mm-dd (e.g., on 2019-12-02)");
+                        }
+                        try {
+                            LocalDate targetDate = DateTimeParser.parseDate(onRemaining);
+                            ArrayList<Task> matchingTasks = new ArrayList<>();
+                            
+                            for (Task task : tasks) {
+                                if (task instanceof Deadline) {
+                                    Deadline deadline = (Deadline) task;
+                                    if (deadline.getBy().toLocalDate().equals(targetDate)) {
+                                        matchingTasks.add(task);
+                                    }
+                                } else if (task instanceof Event) {
+                                    Event event = (Event) task;
+                                    LocalDate eventStartDate = event.getFrom().toLocalDate();
+                                    LocalDate eventEndDate = event.getTo().toLocalDate();
+                                    // Include event if target date falls within or on the event's date range
+                                    if (!targetDate.isBefore(eventStartDate) && !targetDate.isAfter(eventEndDate)) {
+                                        matchingTasks.add(task);
+                                    }
+                                }
+                            }
+                            
+                            if (matchingTasks.isEmpty()) {
+                                System.out.println("No tasks found on " + DateTimeParser.formatForDisplay(targetDate.atStartOfDay()).substring(0, 11) + ".");
+                            } else {
+                                System.out.println("Tasks on " + DateTimeParser.formatForDisplay(targetDate.atStartOfDay()).substring(0, 11) + ":");
+                                for (int i = 0; i < matchingTasks.size(); i++) {
+                                    Task task = matchingTasks.get(i);
+                                    System.out.println((i + 1) + "." + task.getTypeIcon() + task.getStatusIcon() + " " + task.getFullDescription());
+                                }
+                            }
+                        } catch (LeBronException e) {
+                            throw new LeBronException(e.getMessage());
                         }
                         break;
                     case UNKNOWN:
