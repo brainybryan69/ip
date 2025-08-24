@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 /**
  * Handles saving and loading tasks to/from the hard disk.
@@ -117,7 +118,8 @@ public class FileManager {
         
         // Add extra info for deadlines and events
         if (task instanceof Deadline) {
-            sb.append("|").append(getDeadlineBy(task));
+            Deadline deadline = (Deadline) task;
+            sb.append("|").append(DateTimeParser.formatForStorage(deadline.getBy()));
         } else if (task instanceof Event) {
             sb.append("|").append(getEventFrom(task)).append("|").append(getEventTo(task));
         }
@@ -189,7 +191,13 @@ public class FileManager {
                     System.out.println("Warning: Line " + lineNumber + " - Deadline has empty 'by' field");
                     return null;
                 }
-                task = new Deadline(description, by);
+                try {
+                    LocalDateTime dateTime = DateTimeParser.parseFromStorage(by);
+                    task = new Deadline(description, dateTime);
+                } catch (LeBronException e) {
+                    System.out.println("Warning: Line " + lineNumber + " - Invalid date format in deadline: " + e.getMessage());
+                    return null;
+                }
                 break;
             case "E":
                 if (parts.length != 5) {
@@ -239,21 +247,6 @@ public class FileManager {
         return status.equals("0") || status.equals("1");
     }
     
-    /**
-     * Gets the deadline date from a deadline task.
-     * Uses reflection to access private field safely.
-     * 
-     * @param task the deadline task
-     * @return the deadline date
-     */
-    private String getDeadlineBy(Task task) {
-        // Since we know this is a Deadline, we can cast it
-        // For now, we'll use the string representation to extract the date
-        String fullDesc = task.getFullDescription();
-        int byStart = fullDesc.indexOf("(by: ") + 5;
-        int byEnd = fullDesc.lastIndexOf(")");
-        return fullDesc.substring(byStart, byEnd);
-    }
     
     /**
      * Gets the start time from an event task.

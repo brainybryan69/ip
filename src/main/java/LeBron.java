@@ -130,11 +130,15 @@ public class LeBron {
                                 throw new LeBronException(ErrorType.EMPTY_DEADLINE.getMessage());
                             }
                             String by = deadlineRemaining.substring(byIndex + 5);
-                            tasks.add(new Deadline(deadlineDescription, by));
-                            System.out.println("Got it. I've added this task:");
-                            System.out.println(tasks.get(tasks.size()-1).getTypeIcon() + tasks.get(tasks.size()-1).getStatusIcon() + " " + tasks.get(tasks.size()-1).getFullDescription());
-                            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                            autoSave(fileManager, tasks);
+                            try {
+                                tasks.add(new Deadline(deadlineDescription, by));
+                                System.out.println("Got it. I've added this task:");
+                                System.out.println(tasks.get(tasks.size()-1).getTypeIcon() + tasks.get(tasks.size()-1).getStatusIcon() + " " + tasks.get(tasks.size()-1).getFullDescription());
+                                System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                                autoSave(fileManager, tasks);
+                            } catch (LeBronException e) {
+                                throw new LeBronException(e.getMessage());
+                            }
                         } else {
                             throw new LeBronException(ErrorType.MISSING_DEADLINE_FORMAT.getMessage());
                         }
