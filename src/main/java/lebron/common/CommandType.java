@@ -22,6 +22,8 @@ public enum CommandType {
     EVENT,
     /** Show tasks occurring on a specific date */
     ON,
+    /** Find tasks containing a keyword */
+    FIND,
     /** Command we don't recognize */
     UNKNOWN;
     
@@ -51,6 +53,8 @@ public enum CommandType {
             return EVENT;
         } else if (input.equals("on") || input.startsWith("on ")) {
             return ON;
+        } else if (input.equals("find") || input.startsWith("find ")) {
+            return FIND;
         } else {
             return UNKNOWN;
         }

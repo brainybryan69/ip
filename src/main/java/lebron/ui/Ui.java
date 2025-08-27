@@ -133,4 +133,22 @@ public class Ui {
     public void showSaveError() {
         System.out.println("Could not save tasks to file.");
     }
+    
+    /**
+     * Shows the results of a find command with the matching tasks.
+     * 
+     * @param taskList the list of tasks that match the search keyword
+     * @param keyword the keyword that was searched for
+     */
+    public void showFindResults(TaskList taskList, String keyword) {
+        if (taskList.isEmpty()) {
+            System.out.println("No matching tasks found for keyword: " + keyword);
+        } else {
+            System.out.println("Here are the matching tasks in your list:");
+            for (int i = 0; i < taskList.size(); i++) {
+                Task task = taskList.getTask(i);
+                System.out.println((i + 1) + "." + task.getTypeIcon() + task.getStatusIcon() + " " + task.getFullDescription());
+            }
+        }
+    }
 }

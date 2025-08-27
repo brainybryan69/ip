@@ -18,6 +18,8 @@ public class ParserTest {
         assertEquals(CommandType.UNMARK, Parser.parseCommand("unmark 2"));
         assertEquals(CommandType.DELETE, Parser.parseCommand("delete 3"));
         assertEquals(CommandType.ON, Parser.parseCommand("on 2024-12-25"));
+        assertEquals(CommandType.FIND, Parser.parseCommand("find book"));
+        assertEquals(CommandType.FIND, Parser.parseCommand("find"));
         assertEquals(CommandType.BYE, Parser.parseCommand("bye"));
         assertEquals(CommandType.UNKNOWN, Parser.parseCommand("invalid command"));
     }
@@ -148,6 +150,24 @@ public class ParserTest {
         
         assertThrows(LeBronException.class, () -> {
             Parser.parseOnCommand("on   ");
+        });
+    }
+
+    @Test
+    public void testParseFindCommand() throws LeBronException {
+        assertEquals("book", Parser.parseFindCommand("find book"));
+        assertEquals("homework assignment", Parser.parseFindCommand("find homework assignment"));
+        assertEquals("BOOK", Parser.parseFindCommand("find BOOK"));
+    }
+
+    @Test
+    public void testParseFindCommandEmpty() {
+        assertThrows(LeBronException.class, () -> {
+            Parser.parseFindCommand("find");
+        });
+        
+        assertThrows(LeBronException.class, () -> {
+            Parser.parseFindCommand("find   ");
         });
     }
 }

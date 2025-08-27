@@ -104,7 +104,10 @@ public class TaskManager {
             return new AddEventCommand(eventData[0], eventData[1], eventData[2]);
         case ON:
             String dateString = Parser.parseOnCommand(input);
-            return new FindCommand(dateString);
+            return new OnCommand(dateString);
+        case FIND:
+            String keyword = Parser.parseFindCommand(input);
+            return new FindCommand(keyword);
         case UNKNOWN:
         default:
             throw new LeBronException(ErrorType.UNKNOWN_COMMAND.getMessage());

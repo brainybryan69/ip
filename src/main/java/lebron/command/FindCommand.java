@@ -9,35 +9,33 @@ import java.time.LocalDate;
 import java.time.LocalDate;
 
 /**
- * Command to find and display tasks occurring on a specific date.
- * Shows all deadlines and events that match the target date.
+ * Command to find and display tasks containing a keyword in their description.
+ * Shows all tasks whose description contains the specified keyword.
  */
 public class FindCommand extends Command {
-    private String dateString;
+    private String keyword;
     
     /**
-     * Creates a new find command for the specified date.
+     * Creates a new find command for the specified keyword.
      * 
-     * @param dateString the date string to search for
+     * @param keyword the keyword to search for in task descriptions
      */
-    public FindCommand(String dateString) {
-        this.dateString = dateString;
+    public FindCommand(String keyword) {
+        this.keyword = keyword;
     }
     
     /**
-     * Executes the find command by searching for tasks on the specified date.
+     * Executes the find command by searching for tasks containing the keyword.
      * 
      * @param taskList the task list to search in
      * @param ui the UI component for displaying results
      * @param storage the storage component (not used for searching)
      * @return true to continue program execution
-     * @throws LeBronException if the date format is invalid
      */
     @Override
-    public boolean execute(TaskList taskList, Ui ui, FileManager storage) throws LeBronException {
-        LocalDate targetDate = DateTimeParser.parseDate(dateString);
-        TaskList matchingTasks = taskList.getTasksOnDate(targetDate);
-        ui.showTasksOnDate(matchingTasks, targetDate);
+    public boolean execute(TaskList taskList, Ui ui, FileManager storage) {
+        TaskList matchingTasks = taskList.findTasksByKeyword(keyword);
+        ui.showFindResults(matchingTasks, keyword);
         return true;
     }
 }
