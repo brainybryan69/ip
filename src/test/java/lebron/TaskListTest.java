@@ -158,4 +158,48 @@ public class TaskListTest {
         TaskList outsideEvent = taskList.getTasksOnDate(LocalDate.of(2024, 12, 28));
         assertEquals(0, outsideEvent.size());
     }
+
+    @Test
+    public void testFindTasksByKeyword() throws LeBronException {
+        // Add tasks with different descriptions
+        ToDo bookTodo = new ToDo("read book about programming");
+        ToDo bookTodo2 = new ToDo("buy BOOK from store");
+        ToDo homeworkTodo = new ToDo("finish homework assignment");
+        Deadline bookDeadline = new Deadline("submit book report", "2024-12-25 1800");
+        
+        taskList.addTask(bookTodo);
+        taskList.addTask(bookTodo2);
+        taskList.addTask(homeworkTodo);
+        taskList.addTask(bookDeadline);
+        
+        // Test case-insensitive search
+        TaskList bookResults = taskList.findTasksByKeyword("book");
+        assertEquals(3, bookResults.size());
+        assertTrue(bookResults.getTasks().contains(bookTodo));
+        assertTrue(bookResults.getTasks().contains(bookTodo2));
+        assertTrue(bookResults.getTasks().contains(bookDeadline));
+        assertFalse(bookResults.getTasks().contains(homeworkTodo));
+        
+        // Test uppercase search
+        TaskList bookResultsUpper = taskList.findTasksByKeyword("BOOK");
+        assertEquals(3, bookResultsUpper.size());
+        
+        // Test partial match
+        TaskList homeworkResults = taskList.findTasksByKeyword("homework");
+        assertEquals(1, homeworkResults.size());
+        assertTrue(homeworkResults.getTasks().contains(homeworkTodo));
+        
+        // Test no matches
+        TaskList noResults = taskList.findTasksByKeyword("missing");
+        assertEquals(0, noResults.size());
+        assertTrue(noResults.isEmpty());
+    }
+
+    @Test
+    public void testFindTasksByKeywordEmptyList() {
+        TaskList emptyList = new TaskList();
+        TaskList results = emptyList.findTasksByKeyword("anything");
+        assertEquals(0, results.size());
+        assertTrue(results.isEmpty());
+    }
 }

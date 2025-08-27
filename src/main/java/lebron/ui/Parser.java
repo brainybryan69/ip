@@ -128,4 +128,19 @@ public class Parser {
         }
         return dateString;
     }
+    
+    /**
+     * Extracts keyword from a "find" command.
+     * 
+     * @param input the user input (e.g., "find book")
+     * @return the keyword to search for
+     * @throws LeBronException if the keyword is missing
+     */
+    public static String parseFindCommand(String input) throws LeBronException {
+        String keyword = input.length() > 4 ? input.substring(5).trim() : "";
+        if (keyword.isEmpty()) {
+            throw new LeBronException("Please specify a keyword to search for. Use: find <keyword> (e.g., find book)");
+        }
+        return keyword;
+    }
 }

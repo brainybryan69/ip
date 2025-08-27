@@ -20,4 +20,10 @@ delete 1
 
 list
 
+find book
+
+find project
+
+find missing
+
 bye
