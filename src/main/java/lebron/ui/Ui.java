@@ -63,9 +63,9 @@ public class Ui {
      * @param taskCount the total number of tasks after adding
      */
     public void showTaskAdded(Task task, int taskCount) {
-        System.out.println("Got it. I've added this task:");
-        System.out.println(task.getTypeIcon() + task.getStatusIcon() + " " + task.getFullDescription());
-        System.out.println("Now you have " + taskCount + " tasks in the list.");
+        showFormattedMessage("Got it. I've added this task:", 
+                           task.getTypeIcon() + task.getStatusIcon() + " " + task.getFullDescription(),
+                           "Now you have %d tasks in the list.", taskCount);
     }
 
     /**
@@ -95,9 +95,9 @@ public class Ui {
      * @param remainingCount the number of tasks remaining after deletion
      */
     public void showTaskDeleted(Task task, int remainingCount) {
-        System.out.println("Noted. I've removed the task:");
-        System.out.println(task.getTypeIcon() + task.getStatusIcon() + " " + task.getFullDescription());
-        System.out.println("Now you have " + remainingCount + " tasks in the list.");
+        showFormattedMessage("Noted. I've removed the task:",
+                           task.getTypeIcon() + task.getStatusIcon() + " " + task.getFullDescription(),
+                           "Now you have %d tasks in the list.", remainingCount);
     }
 
     /**
@@ -110,9 +110,9 @@ public class Ui {
         String dateStr = DateTimeParser.formatForDisplay(targetDate.atStartOfDay()).substring(0, 11);
 
         if (taskList.isEmpty()) {
-            System.out.println("No tasks found on " + dateStr + ".");
+            showFormattedMessage("No tasks found on %s.", dateStr);
         } else {
-            System.out.println("Tasks on " + dateStr + ":");
+            showFormattedMessage("Tasks on %s:", dateStr);
             for (int i = 0; i < taskList.size(); i++) {
                 Task task = taskList.getTask(i);
                 System.out.println((i + 1) + "." + task.getTypeIcon() + task.getStatusIcon() + " " + task.getFullDescription());
@@ -142,7 +142,7 @@ public class Ui {
      */
     public void showFindResults(TaskList taskList, String keyword) {
         if (taskList.isEmpty()) {
-            System.out.println("No matching tasks found for keyword: " + keyword);
+            showFormattedMessage("No matching tasks found for keyword: %s", keyword);
         } else {
             System.out.println("Here are the matching tasks in your list:");
             for (int i = 0; i < taskList.size(); i++) {
@@ -150,5 +150,15 @@ public class Ui {
                 System.out.println((i + 1) + "." + task.getTypeIcon() + task.getStatusIcon() + " " + task.getFullDescription());
             }
         }
+    }
+    
+    /**
+     * Shows formatted messages using printf-style formatting with varargs.
+     *
+     * @param format the format string
+     * @param args the arguments to format
+     */
+    public void showFormattedMessage(String format, Object... args) {
+        System.out.printf(format + "%n", args);
     }
 }

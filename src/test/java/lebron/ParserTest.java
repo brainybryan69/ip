@@ -1,10 +1,13 @@
 package lebron;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import lebron.ui.Parser;
+
 import lebron.common.CommandType;
 import lebron.common.LeBronException;
+import lebron.ui.Parser;
 
 public class ParserTest {
 

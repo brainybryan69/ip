@@ -63,19 +63,34 @@ public class Parser {
      * @throws LeBronException if format is invalid or components are missing
      */
     public static String[] parseDeadlineCommand(String input) throws LeBronException {
+        return parseDeadlineCommand(input, ErrorType.EMPTY_DEADLINE.getMessage(),
+                                  ErrorType.MISSING_DEADLINE_FORMAT.getMessage());
+    }
+
+    /**
+     * Extracts description and deadline from a deadline command with custom error messages.
+     *
+     * @param input the user input
+     * @param errorMessages custom error messages for empty deadline and missing format
+     * @return array containing [description, deadline]
+     * @throws LeBronException if format is invalid or components are missing
+     */
+    public static String[] parseDeadlineCommand(String input, String... errorMessages) throws LeBronException {
+        String emptyDeadlineMsg = errorMessages.length > 0 ? errorMessages[0] : ErrorType.EMPTY_DEADLINE.getMessage();
+        String missingFormatMsg = errorMessages.length > 1 ? errorMessages[1] : ErrorType.MISSING_DEADLINE_FORMAT.getMessage();
         String remaining = input.length() > 8 ? input.substring(9) : "";
         if (remaining.trim().isEmpty()) {
-            throw new LeBronException(ErrorType.EMPTY_DEADLINE.getMessage());
+            throw new LeBronException(emptyDeadlineMsg);
         }
 
         int byIndex = remaining.indexOf(" /by ");
         if (byIndex == -1) {
-            throw new LeBronException(ErrorType.MISSING_DEADLINE_FORMAT.getMessage());
+            throw new LeBronException(missingFormatMsg);
         }
 
         String description = remaining.substring(0, byIndex).trim();
         if (description.isEmpty()) {
-            throw new LeBronException(ErrorType.EMPTY_DEADLINE.getMessage());
+            throw new LeBronException(emptyDeadlineMsg);
         }
 
         String by = remaining.substring(byIndex + 5);
@@ -90,21 +105,36 @@ public class Parser {
      * @throws LeBronException if format is invalid or components are missing
      */
     public static String[] parseEventCommand(String input) throws LeBronException {
+        return parseEventCommand(input, ErrorType.EMPTY_EVENT.getMessage(),
+                               ErrorType.MISSING_EVENT_FORMAT.getMessage());
+    }
+
+    /**
+     * Extracts description, start time, and end time from an event command with custom error messages.
+     *
+     * @param input the user input
+     * @param errorMessages custom error messages for empty event and missing format
+     * @return array containing [description, from, to]
+     * @throws LeBronException if format is invalid or components are missing
+     */
+    public static String[] parseEventCommand(String input, String... errorMessages) throws LeBronException {
+        String emptyEventMsg = errorMessages.length > 0 ? errorMessages[0] : ErrorType.EMPTY_EVENT.getMessage();
+        String missingFormatMsg = errorMessages.length > 1 ? errorMessages[1] : ErrorType.MISSING_EVENT_FORMAT.getMessage();
         String remaining = input.length() > 5 ? input.substring(6) : "";
         if (remaining.trim().isEmpty()) {
-            throw new LeBronException(ErrorType.EMPTY_EVENT.getMessage());
+            throw new LeBronException(emptyEventMsg);
         }
 
         int fromIndex = remaining.indexOf(" /from ");
         int toIndex = remaining.indexOf(" /to ");
 
         if (fromIndex == -1 || toIndex == -1) {
-            throw new LeBronException(ErrorType.MISSING_EVENT_FORMAT.getMessage());
+            throw new LeBronException(missingFormatMsg);
         }
 
         String description = remaining.substring(0, fromIndex).trim();
         if (description.isEmpty()) {
-            throw new LeBronException(ErrorType.EMPTY_EVENT.getMessage());
+            throw new LeBronException(emptyEventMsg);
         }
 
         String from = remaining.substring(fromIndex + 7, toIndex);

@@ -96,7 +96,7 @@ public class FileManager {
 
         // Inform user if some data was corrupted
         if (corruptedLines > 0) {
-            System.out.println("Warning: " + corruptedLines + " corrupted task(s) were skipped while loading.");
+            logWarning("%d corrupted task(s) were skipped while loading.", corruptedLines);
         }
 
         return tasks;
@@ -158,7 +158,7 @@ public class FileManager {
 
         String[] parts = line.split("\\|");
         if (parts.length < 3) {
-            System.out.println("Warning: Line " + lineNumber + " has too few fields - expected at least 3, got " + parts.length);
+            logWarning("Line %d has too few fields - expected at least 3, got %d", lineNumber, parts.length);
             return null;
         }
 
@@ -168,19 +168,19 @@ public class FileManager {
 
         // Validate task type
         if (!isValidTaskType(type)) {
-            System.out.println("Warning: Line " + lineNumber + " has invalid task type '" + type + "' - expected T, D, or E");
+            logWarning("Line %d has invalid task type '%s' - expected T, D, or E", lineNumber, type);
             return null;
         }
 
         // Validate status
         if (!isValidStatus(statusStr)) {
-            System.out.println("Warning: Line " + lineNumber + " has invalid status '" + statusStr + "' - expected 0 or 1");
+            logWarning("Line %d has invalid status '%s' - expected 0 or 1", lineNumber, statusStr);
             return null;
         }
 
         // Validate description
         if (description.trim().isEmpty()) {
-            System.out.println("Warning: Line " + lineNumber + " has empty description");
+            logWarning("Line %d has empty description", lineNumber);
             return null;
         }
 
@@ -191,38 +191,38 @@ public class FileManager {
             switch (type) {
             case "T":
                 if (parts.length != 3) {
-                    System.out.println("Warning: Line " + lineNumber + " - Todo tasks should have exactly 3 fields, got " + parts.length);
+                    logWarning("Line %d - Todo tasks should have exactly 3 fields, got %d", lineNumber, parts.length);
                     return null;
                 }
                 task = new ToDo(description);
                 break;
             case "D":
                 if (parts.length != 4) {
-                    System.out.println("Warning: Line " + lineNumber + " - Deadline tasks should have exactly 4 fields, got " + parts.length);
+                    logWarning("Line %d - Deadline tasks should have exactly 4 fields, got %d", lineNumber, parts.length);
                     return null;
                 }
                 String by = parts[3];
                 if (by.trim().isEmpty()) {
-                    System.out.println("Warning: Line " + lineNumber + " - Deadline has empty 'by' field");
+                    logWarning("Line %d - Deadline has empty 'by' field", lineNumber);
                     return null;
                 }
                 try {
                     LocalDateTime dateTime = DateTimeParser.parseFromStorage(by);
                     task = new Deadline(description, dateTime);
                 } catch (LeBronException e) {
-                    System.out.println("Warning: Line " + lineNumber + " - Invalid date format in deadline: " + e.getMessage());
+                    logWarning("Line %d - Invalid date format in deadline: %s", lineNumber, e.getMessage());
                     return null;
                 }
                 break;
             case "E":
                 if (parts.length != 5) {
-                    System.out.println("Warning: Line " + lineNumber + " - Event tasks should have exactly 5 fields, got " + parts.length);
+                    logWarning("Line %d - Event tasks should have exactly 5 fields, got %d", lineNumber, parts.length);
                     return null;
                 }
                 String from = parts[3];
                 String to = parts[4];
                 if (from.trim().isEmpty() || to.trim().isEmpty()) {
-                    System.out.println("Warning: Line " + lineNumber + " - Event has empty time fields");
+                    logWarning("Line %d - Event has empty time fields", lineNumber);
                     return null;
                 }
                 try {
@@ -230,7 +230,7 @@ public class FileManager {
                     LocalDateTime toDateTime = DateTimeParser.parseFromStorage(to);
                     task = new Event(description, fromDateTime, toDateTime);
                 } catch (LeBronException e) {
-                    System.out.println("Warning: Line " + lineNumber + " - Invalid date format in event: " + e.getMessage());
+                    logWarning("Line %d - Invalid date format in event: %s", lineNumber, e.getMessage());
                     return null;
                 }
                 break;
@@ -242,7 +242,7 @@ public class FileManager {
             }
 
         } catch (Exception e) {
-            System.out.println("Warning: Line " + lineNumber + " - Error creating task: " + e.getMessage());
+            logWarning("Line %d - Error creating task: %s", lineNumber, e.getMessage());
             return null;
         }
 
@@ -267,6 +267,16 @@ public class FileManager {
      */
     private boolean isValidStatus(String status) {
         return status.equals("0") || status.equals("1");
+    }
+
+    /**
+     * Logs a warning message with formatted output using varargs.
+     * 
+     * @param format the format string
+     * @param args the arguments for the format string
+     */
+    private void logWarning(String format, Object... args) {
+        System.out.printf("Warning: " + format + "%n", args);
     }
 
 }
