@@ -37,16 +37,16 @@ public class ParserTest {
         assertThrows(LeBronException.class, () -> {
             Parser.parseTaskNumber("mark abc", 4);
         });
-        
+
         // Zero or negative number
         assertThrows(LeBronException.class, () -> {
             Parser.parseTaskNumber("mark 0", 4);
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             Parser.parseTaskNumber("mark -1", 4);
         });
-        
+
         // Missing number
         assertThrows(LeBronException.class, () -> {
             Parser.parseTaskNumber("mark", 4);
@@ -56,7 +56,7 @@ public class ParserTest {
     @Test
     public void testParseTodoDescription() throws LeBronException {
         assertEquals("read book", Parser.parseTodoDescription("todo read book"));
-        assertEquals("buy groceries and cook dinner", 
+        assertEquals("buy groceries and cook dinner",
                      Parser.parseTodoDescription("todo buy groceries and cook dinner"));
     }
 
@@ -65,7 +65,7 @@ public class ParserTest {
         assertThrows(LeBronException.class, () -> {
             Parser.parseTodoDescription("todo");
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             Parser.parseTodoDescription("todo   ");
         });
@@ -76,7 +76,7 @@ public class ParserTest {
         String[] result = Parser.parseDeadlineCommand("deadline submit report /by 2024-12-25 1800");
         assertEquals("submit report", result[0]);
         assertEquals("2024-12-25 1800", result[1]);
-        
+
         String[] result2 = Parser.parseDeadlineCommand("deadline finish assignment /by tomorrow");
         assertEquals("finish assignment", result2[0]);
         assertEquals("tomorrow", result2[1]);
@@ -88,12 +88,12 @@ public class ParserTest {
         assertThrows(LeBronException.class, () -> {
             Parser.parseDeadlineCommand("deadline submit report tomorrow");
         });
-        
+
         // Empty description
         assertThrows(LeBronException.class, () -> {
             Parser.parseDeadlineCommand("deadline /by tomorrow");
         });
-        
+
         // Empty command
         assertThrows(LeBronException.class, () -> {
             Parser.parseDeadlineCommand("deadline");
@@ -106,7 +106,7 @@ public class ParserTest {
         assertEquals("meeting", result[0]);
         assertEquals("2024-12-25 1400", result[1]);
         assertEquals("2024-12-25 1600", result[2]);
-        
+
         String[] result2 = Parser.parseEventCommand("event conference /from Monday 2pm /to Monday 5pm");
         assertEquals("conference", result2[0]);
         assertEquals("Monday 2pm", result2[1]);
@@ -119,17 +119,17 @@ public class ParserTest {
         assertThrows(LeBronException.class, () -> {
             Parser.parseEventCommand("event meeting /to 2024-12-25 1600");
         });
-        
+
         // Missing /to
         assertThrows(LeBronException.class, () -> {
             Parser.parseEventCommand("event meeting /from 2024-12-25 1400");
         });
-        
+
         // Empty description
         assertThrows(LeBronException.class, () -> {
             Parser.parseEventCommand("event /from today /to tomorrow");
         });
-        
+
         // Empty command
         assertThrows(LeBronException.class, () -> {
             Parser.parseEventCommand("event");
@@ -147,7 +147,7 @@ public class ParserTest {
         assertThrows(LeBronException.class, () -> {
             Parser.parseOnCommand("on");
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             Parser.parseOnCommand("on   ");
         });
@@ -165,7 +165,7 @@ public class ParserTest {
         assertThrows(LeBronException.class, () -> {
             Parser.parseFindCommand("find");
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             Parser.parseFindCommand("find   ");
         });

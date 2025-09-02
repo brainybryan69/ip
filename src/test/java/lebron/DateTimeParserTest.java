@@ -32,11 +32,11 @@ public class DateTimeParserTest {
         assertThrows(LeBronException.class, () -> {
             DateTimeParser.parseDateTime("2024/12/25 18:30");
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             DateTimeParser.parseDateTime("25-12-2024 1830");
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             DateTimeParser.parseDateTime("invalid");
         });
@@ -47,11 +47,11 @@ public class DateTimeParserTest {
         assertThrows(LeBronException.class, () -> {
             DateTimeParser.parseDateTime("");
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             DateTimeParser.parseDateTime("   ");
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             DateTimeParser.parseDateTime(null);
         });
@@ -108,11 +108,11 @@ public class DateTimeParserTest {
         assertThrows(LeBronException.class, () -> {
             DateTimeParser.parseDate("2024/12/25");
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             DateTimeParser.parseDate("25-12-2024");
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             DateTimeParser.parseDate("invalid");
         });
@@ -123,11 +123,11 @@ public class DateTimeParserTest {
         assertThrows(LeBronException.class, () -> {
             DateTimeParser.parseDate("");
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             DateTimeParser.parseDate("   ");
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             DateTimeParser.parseDate(null);
         });

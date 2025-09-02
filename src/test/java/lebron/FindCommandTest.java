@@ -24,12 +24,12 @@ public class FindCommandTest {
         taskList = new TaskList();
         ui = new Ui();
         fileManager = null; // Not needed for find command
-        
+
         // Add some test tasks
         taskList.addTask(new ToDo("read book about programming"));
         taskList.addTask(new ToDo("buy groceries"));
         taskList.addTask(new Deadline("submit book report", "2024-12-25 1800"));
-        
+
         // Capture output for testing
         outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
@@ -39,7 +39,7 @@ public class FindCommandTest {
     public void testFindCommandWithMatches() {
         FindCommand findCommand = new FindCommand("book");
         boolean result = findCommand.execute(taskList, ui, fileManager);
-        
+
         assertTrue(result); // Should return true to continue execution
         String output = outputStream.toString();
         assertTrue(output.contains("Here are the matching tasks in your list:"));
@@ -52,7 +52,7 @@ public class FindCommandTest {
     public void testFindCommandWithNoMatches() {
         FindCommand findCommand = new FindCommand("missing");
         boolean result = findCommand.execute(taskList, ui, fileManager);
-        
+
         assertTrue(result); // Should return true to continue execution
         String output = outputStream.toString();
         assertTrue(output.contains("No matching tasks found for keyword: missing"));
@@ -62,7 +62,7 @@ public class FindCommandTest {
     public void testFindCommandCaseInsensitive() {
         FindCommand findCommand = new FindCommand("BOOK");
         boolean result = findCommand.execute(taskList, ui, fileManager);
-        
+
         assertTrue(result);
         String output = outputStream.toString();
         assertTrue(output.contains("Here are the matching tasks in your list:"));

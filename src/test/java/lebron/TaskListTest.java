@@ -44,7 +44,7 @@ public class TaskListTest {
     public void testDeleteTask() {
         taskList.addTask(todo);
         taskList.addTask(deadline);
-        
+
         Task deletedTask = taskList.deleteTask(0);
         assertEquals(todo, deletedTask);
         assertEquals(1, taskList.size());
@@ -62,7 +62,7 @@ public class TaskListTest {
     public void testGetTask() {
         taskList.addTask(todo);
         taskList.addTask(deadline);
-        
+
         assertEquals(todo, taskList.getTask(0));
         assertEquals(deadline, taskList.getTask(1));
     }
@@ -78,7 +78,7 @@ public class TaskListTest {
     public void testMarkTask() {
         taskList.addTask(todo);
         assertFalse(todo.isDone());
-        
+
         taskList.markTask(0);
         assertTrue(todo.isDone());
     }
@@ -88,7 +88,7 @@ public class TaskListTest {
         taskList.addTask(todo);
         todo.markAsDone();
         assertTrue(todo.isDone());
-        
+
         taskList.unmarkTask(0);
         assertFalse(todo.isDone());
     }
@@ -104,13 +104,13 @@ public class TaskListTest {
     public void testGetTasks() {
         taskList.addTask(todo);
         taskList.addTask(deadline);
-        
+
         var tasks = taskList.getTasks();
         assertEquals(2, tasks.size());
         assertEquals(todo, tasks.get(0));
         assertEquals(deadline, tasks.get(1));
-        
-        // Ensure it returns a copy, not the original list
+
+        // Ensure it returns a copy, not the original lis
         tasks.clear();
         assertEquals(2, taskList.size());
     }
@@ -118,20 +118,20 @@ public class TaskListTest {
     @Test
     public void testGetTasksOnDate() throws LeBronException {
         LocalDate targetDate = LocalDate.of(2024, 12, 25);
-        
+
         // Add tasks for the target date
         taskList.addTask(todo); // ToDo - shouldn't match
         taskList.addTask(deadline); // Deadline on 2024-12-25
         taskList.addTask(event); // Event on 2024-12-25
-        
+
         // Add a deadline for a different date
         Deadline otherDeadline = new Deadline("Other task", "2024-12-26 1000");
         taskList.addTask(otherDeadline);
-        
+
         TaskList matchingTasks = taskList.getTasksOnDate(targetDate);
-        assertEquals(2, matchingTasks.size()); // Should match deadline and event
-        
-        // Verify the matching tasks are correct
+        assertEquals(2, matchingTasks.size()); // Should match deadline and even
+
+        // Verify the matching tasks are correc
         var tasks = matchingTasks.getTasks();
         assertTrue(tasks.contains(deadline));
         assertTrue(tasks.contains(event));
@@ -141,19 +141,19 @@ public class TaskListTest {
 
     @Test
     public void testGetTasksOnDateMultiDayEvent() throws LeBronException {
-        // Create a multi-day event
+        // Create a multi-day even
         Event multiDayEvent = new Event("Conference", "2024-12-25 0900", "2024-12-27 1700");
         taskList.addTask(multiDayEvent);
-        
+
         // Test dates within the event period
         TaskList day1 = taskList.getTasksOnDate(LocalDate.of(2024, 12, 25));
         TaskList day2 = taskList.getTasksOnDate(LocalDate.of(2024, 12, 26));
         TaskList day3 = taskList.getTasksOnDate(LocalDate.of(2024, 12, 27));
-        
+
         assertEquals(1, day1.size());
         assertEquals(1, day2.size());
         assertEquals(1, day3.size());
-        
+
         // Test date outside the event period
         TaskList outsideEvent = taskList.getTasksOnDate(LocalDate.of(2024, 12, 28));
         assertEquals(0, outsideEvent.size());
@@ -166,12 +166,12 @@ public class TaskListTest {
         ToDo bookTodo2 = new ToDo("buy BOOK from store");
         ToDo homeworkTodo = new ToDo("finish homework assignment");
         Deadline bookDeadline = new Deadline("submit book report", "2024-12-25 1800");
-        
+
         taskList.addTask(bookTodo);
         taskList.addTask(bookTodo2);
         taskList.addTask(homeworkTodo);
         taskList.addTask(bookDeadline);
-        
+
         // Test case-insensitive search
         TaskList bookResults = taskList.findTasksByKeyword("book");
         assertEquals(3, bookResults.size());
@@ -179,16 +179,16 @@ public class TaskListTest {
         assertTrue(bookResults.getTasks().contains(bookTodo2));
         assertTrue(bookResults.getTasks().contains(bookDeadline));
         assertFalse(bookResults.getTasks().contains(homeworkTodo));
-        
+
         // Test uppercase search
         TaskList bookResultsUpper = taskList.findTasksByKeyword("BOOK");
         assertEquals(3, bookResultsUpper.size());
-        
+
         // Test partial match
         TaskList homeworkResults = taskList.findTasksByKeyword("homework");
         assertEquals(1, homeworkResults.size());
         assertTrue(homeworkResults.getTasks().contains(homeworkTodo));
-        
+
         // Test no matches
         TaskList noResults = taskList.findTasksByKeyword("missing");
         assertEquals(0, noResults.size());

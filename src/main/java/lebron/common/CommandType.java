@@ -26,11 +26,11 @@ public enum CommandType {
     FIND,
     /** Command we don't recognize */
     UNKNOWN;
-    
+
     /**
      * Figures out what command the user typed.
      * Looks at the beginning of their input to determine the command type.
-     * 
+     *
      * @param input what the user typed
      * @return the type of command they want to run
      */

@@ -18,21 +18,21 @@ public enum ErrorType {
     MISSING_EVENT_FORMAT("Please specify event time with /from and /to"),
     /** When user types something we don't understand */
     UNKNOWN_COMMAND("Sorry! I don't know what that means :(");
-    
+
     private final String message;
-    
+
     /**
      * Creates an error type with its message.
-     * 
+     *
      * @param message what to tell the user when this error happens
      */
     ErrorType(String message) {
         this.message = message;
     }
-    
+
     /**
      * Gets the error message to show the user.
-     * 
+     *
      * @return the helpful error message
      */
     public String getMessage() {

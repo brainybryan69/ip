@@ -1,12 +1,25 @@
 package lebron;
 
-import lebron.task.TaskList;
-import lebron.ui.Ui;
-import lebron.ui.Parser;
-import lebron.storage.Storage;
-import lebron.command.*;
-import lebron.common.*;
 import java.util.Scanner;
+
+import lebron.command.AddDeadlineCommand;
+import lebron.command.AddEventCommand;
+import lebron.command.AddTodoCommand;
+import lebron.command.Command;
+import lebron.command.DeleteCommand;
+import lebron.command.ExitCommand;
+import lebron.command.FindCommand;
+import lebron.command.ListCommand;
+import lebron.command.MarkCommand;
+import lebron.command.OnCommand;
+import lebron.command.UnmarkCommand;
+import lebron.common.CommandType;
+import lebron.common.ErrorType;
+import lebron.common.LeBronException;
+import lebron.storage.Storage;
+import lebron.task.TaskList;
+import lebron.ui.Parser;
+import lebron.ui.Ui;
 
 /**
  * Main orchestrator for the LeBron task manager application.
@@ -17,7 +30,7 @@ public class TaskManager {
     private Ui ui;
     private Storage storage;
     private Scanner scanner;
-    
+
     /**
      * Creates a new TaskManager with default components.
      */
@@ -27,7 +40,7 @@ public class TaskManager {
         this.taskList = new TaskList();
         this.scanner = new Scanner(System.in);
     }
-    
+
     /**
      * Starts the task manager application.
      * Loads existing tasks, shows welcome message, and enters main loop.
@@ -35,28 +48,28 @@ public class TaskManager {
     public void run() {
         loadTasks();
         ui.showWelcome();
-        
+
         boolean isRunning = true;
         while (isRunning) {
             try {
                 String input = scanner.nextLine();
-                
+
                 if (input.trim().isEmpty()) {
                     ui.showError("");
                     continue;
                 }
-                
+
                 Command command = parseCommand(input);
                 isRunning = command.execute(taskList, ui, storage.getFileManager());
-                
+
             } catch (LeBronException e) {
                 ui.showError(e.getMessage());
             }
         }
-        
+
         scanner.close();
     }
-    
+
     /**
      * Loads existing tasks from storage.
      * Shows error message if loading fails but continues execution.
@@ -68,17 +81,17 @@ public class TaskManager {
             ui.showLoadError();
         }
     }
-    
+
     /**
      * Parses user input and creates the appropriate command object.
-     * 
+     *
      * @param input the user input string
-     * @return the Command object representing the user's intent
+     * @return the Command object representing the user's inten
      * @throws LeBronException if the command is invalid or malformed
      */
     private Command parseCommand(String input) throws LeBronException {
-        lebron.common.CommandType commandType = Parser.parseCommand(input);
-        
+        CommandType commandType = Parser.parseCommand(input);
+
         switch (commandType) {
         case BYE:
             return new ExitCommand();

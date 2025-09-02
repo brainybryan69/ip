@@ -1,11 +1,8 @@
 package lebron.command;
 
-import lebron.task.*;
-import lebron.ui.Ui;
-import lebron.storage.FileManager;
-import lebron.common.*;
-import lebron.util.DateTimeParser;
-import java.time.LocalDate;
+import lebron.common.LeBronException;
+import lebron.task.Deadline;
+import lebron.task.Task;
 /**
  * Command to add a new deadline task to the task list.
  * Creates a Deadline task with the specified description and due date.
@@ -13,10 +10,10 @@ import java.time.LocalDate;
 public class AddDeadlineCommand extends AddCommand {
     private String description;
     private String by;
-    
+
     /**
      * Creates a new add deadline command.
-     * 
+     *
      * @param description the description of the deadline task
      * @param by the deadline date/time string
      */
@@ -24,10 +21,10 @@ public class AddDeadlineCommand extends AddCommand {
         this.description = description;
         this.by = by;
     }
-    
+
     /**
      * Creates a new Deadline task with the specified description and due date.
-     * 
+     *
      * @return the created Deadline task
      * @throws LeBronException if the date format is invalid
      */

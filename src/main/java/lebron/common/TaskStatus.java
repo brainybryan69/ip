@@ -8,21 +8,21 @@ public enum TaskStatus {
     DONE("[X]"),
     /** Task is not yet completed - shows as [ ] */
     NOT_DONE("[ ]");
-    
+
     private final String icon;
-    
+
     /**
      * Creates a task status with its checkbox icon.
-     * 
+     *
      * @param icon the checkbox symbol to display
      */
     TaskStatus(String icon) {
         this.icon = icon;
     }
-    
+
     /**
      * Gets the checkbox icon for this status.
-     * 
+     *
      * @return "[X]" for done or "[ ]" for not done
      */
     public String getIcon() {

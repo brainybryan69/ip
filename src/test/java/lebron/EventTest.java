@@ -54,7 +54,7 @@ public class EventTest {
         assertThrows(LeBronException.class, () -> {
             new Event("Invalid event", "invalid-start", "2024-12-25 1100");
         });
-        
+
         assertThrows(LeBronException.class, () -> {
             new Event("Invalid event", "2024-12-25 1000", "invalid-end");
         });

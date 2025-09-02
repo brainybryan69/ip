@@ -4,10 +4,10 @@ package lebron.common;
  * This exception gets thrown when we need to show the user an error message.
  */
 public class LeBronException extends Exception {
-    
+
     /**
      * Creates a new exception with an error message.
-     * 
+     *
      * @param message what went wrong (gets shown to the user)
      */
     public LeBronException(String message) {

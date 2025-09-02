@@ -1,11 +1,20 @@
 package lebron.storage;
 
-import lebron.task.*;
-import lebron.common.LeBronException;
-import lebron.util.DateTimeParser;
-import java.io.*;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+
+import lebron.common.LeBronException;
+import lebron.task.Deadline;
+import lebron.task.Event;
+import lebron.task.Task;
+import lebron.task.ToDo;
+import lebron.util.DateTimeParser;
 
 /**
  * Handles saving and loading tasks to/from the hard disk.
@@ -15,7 +24,7 @@ public class FileManager {
     private static final String DATA_DIR = "data";
     private static final String FILE_NAME = "lebron.txt";
     private final String filePath;
-    
+
     /**
      * Creates a new file manager.
      * Sets up the path to store tasks using OS-independent file separators.
@@ -23,59 +32,59 @@ public class FileManager {
     public FileManager() {
         this.filePath = DATA_DIR + File.separator + FILE_NAME;
     }
-    
+
     /**
      * Saves all tasks to the hard disk.
      * Creates the data folder if it doesn't exist.
-     * 
+     *
      * @param tasks the list of tasks to save
      * @throws IOException if something goes wrong with file writing
      */
     public void saveTasks(ArrayList<Task> tasks) throws IOException {
-        // Create data directory if it doesn't exist
+        // Create data directory if it doesn't exis
         File dataDir = new File(DATA_DIR);
         if (!dataDir.exists()) {
             dataDir.mkdirs();
         }
-        
+
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             for (Task task : tasks) {
                 writer.println(taskToString(task));
             }
         }
     }
-    
+
     /**
      * Loads all tasks from the hard disk.
      * Returns an empty list if the file doesn't exist.
      * Skips corrupted lines and continues loading valid tasks.
-     * 
+     *
      * @return the list of saved tasks
      * @throws IOException if something goes wrong with file reading
      */
     public ArrayList<Task> loadTasks() throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
-        
-        // Return empty list if file doesn't exist
+
+        // Return empty list if file doesn't exis
         if (!file.exists()) {
             return tasks;
         }
-        
+
         int lineNumber = 0;
         int corruptedLines = 0;
-        
+
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 lineNumber++;
                 line = line.trim();
-                
+
                 // Skip empty lines
                 if (line.isEmpty()) {
                     continue;
                 }
-                
+
                 Task task = stringToTask(line, lineNumber);
                 if (task != null) {
                     tasks.add(task);
@@ -84,25 +93,25 @@ public class FileManager {
                 }
             }
         }
-        
+
         // Inform user if some data was corrupted
         if (corruptedLines > 0) {
             System.out.println("Warning: " + corruptedLines + " corrupted task(s) were skipped while loading.");
         }
-        
+
         return tasks;
     }
-    
+
     /**
      * Converts a task to a string format for saving.
      * Format: TYPE|STATUS|DESCRIPTION|EXTRA_INFO
-     * 
-     * @param task the task to convert
+     *
+     * @param task the task to conver
      * @return the string representation
      */
     private String taskToString(Task task) {
         StringBuilder sb = new StringBuilder();
-        
+
         // Add type
         if (task instanceof ToDo) {
             sb.append("T");
@@ -111,16 +120,16 @@ public class FileManager {
         } else if (task instanceof Event) {
             sb.append("E");
         }
-        
+
         sb.append("|");
-        
+
         // Add status
         sb.append(task.isDone() ? "1" : "0");
         sb.append("|");
-        
+
         // Add description
         sb.append(task.getDescription());
-        
+
         // Add extra info for deadlines and events
         if (task instanceof Deadline) {
             Deadline deadline = (Deadline) task;
@@ -129,15 +138,15 @@ public class FileManager {
             Event event = (Event) task;
             sb.append("|").append(DateTimeParser.formatForStorage(event.getFrom())).append("|").append(DateTimeParser.formatForStorage(event.getTo()));
         }
-        
+
         return sb.toString();
     }
-    
+
     /**
      * Converts a string back to a task.
      * Parses the saved format and creates the right type of task.
      * Provides detailed validation and error reporting for corrupted data.
-     * 
+     *
      * @param line the string representation of the task
      * @param lineNumber the line number in the file (for error reporting)
      * @return the recreated task, or null if format is invalid
@@ -146,38 +155,38 @@ public class FileManager {
         if (line.isEmpty()) {
             return null;
         }
-        
+
         String[] parts = line.split("\\|");
         if (parts.length < 3) {
             System.out.println("Warning: Line " + lineNumber + " has too few fields - expected at least 3, got " + parts.length);
             return null;
         }
-        
+
         String type = parts[0];
         String statusStr = parts[1];
         String description = parts[2];
-        
+
         // Validate task type
         if (!isValidTaskType(type)) {
             System.out.println("Warning: Line " + lineNumber + " has invalid task type '" + type + "' - expected T, D, or E");
             return null;
         }
-        
+
         // Validate status
         if (!isValidStatus(statusStr)) {
             System.out.println("Warning: Line " + lineNumber + " has invalid status '" + statusStr + "' - expected 0 or 1");
             return null;
         }
-        
+
         // Validate description
         if (description.trim().isEmpty()) {
             System.out.println("Warning: Line " + lineNumber + " has empty description");
             return null;
         }
-        
+
         boolean isDone = statusStr.equals("1");
         Task task = null;
-        
+
         try {
             switch (type) {
             case "T":
@@ -226,38 +235,38 @@ public class FileManager {
                 }
                 break;
             }
-            
+
             // Set the completion status
             if (task != null && isDone) {
                 task.markAsDone();
             }
-            
+
         } catch (Exception e) {
             System.out.println("Warning: Line " + lineNumber + " - Error creating task: " + e.getMessage());
             return null;
         }
-        
+
         return task;
     }
-    
+
     /**
      * Checks if the task type character is valid.
-     * 
+     *
      * @param type the type character to validate
      * @return true if valid (T, D, or E), false otherwise
      */
     private boolean isValidTaskType(String type) {
         return type.equals("T") || type.equals("D") || type.equals("E");
     }
-    
+
     /**
      * Checks if the status string is valid.
-     * 
+     *
      * @param status the status string to validate
      * @return true if valid (0 or 1), false otherwise
      */
     private boolean isValidStatus(String status) {
         return status.equals("0") || status.equals("1");
     }
-    
+
 }
