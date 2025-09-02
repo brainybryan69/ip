@@ -1,5 +1,7 @@
 package lebron;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 import lebron.command.AddDeadlineCommand;
@@ -39,6 +41,7 @@ public class TaskManager {
         this.storage = new Storage();
         this.taskList = new TaskList();
         this.scanner = new Scanner(System.in);
+        loadTasks(); // Load tasks for GUI usage
     }
 
     /**
@@ -68,6 +71,41 @@ public class TaskManager {
         }
 
         scanner.close();
+    }
+
+    /**
+     * Processes a single command and returns the response as a string.
+     * Captures System.out during command execution to return as string.
+     * Used for GUI integration.
+     * 
+     * @param input the user input command
+     * @return the response message as a string
+     */
+    public String processCommand(String input) {
+        // Capture System.out
+        PrintStream originalOut = System.out;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream capturedOut = new PrintStream(baos);
+        System.setOut(capturedOut);
+        
+        try {
+            if (input.trim().isEmpty()) {
+                ui.showError("");
+                return baos.toString().trim();
+            }
+            
+            Command command = parseCommand(input);
+            command.execute(taskList, ui, storage.getFileManager());
+            
+            return baos.toString().trim();
+            
+        } catch (LeBronException e) {
+            ui.showError(e.getMessage());
+            return baos.toString().trim();
+        } finally {
+            // Always restore System.out
+            System.setOut(originalOut);
+        }
     }
 
     /**

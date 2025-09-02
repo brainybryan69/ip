@@ -8,6 +8,7 @@ package lebron;
  * and LeBron will help you stay organized!
  */
 public class LeBron {
+    private static TaskManager sharedTaskManager = new TaskManager();
 
     /**
      * Starts the LeBron task manager.
@@ -20,9 +21,13 @@ public class LeBron {
     }
 
     /**
-     * Generates a response for the user's chat message.
+     * Generates a response for the user's chat message using the shared TaskManager.
+     * This allows GUI and console to share the same task data.
+     * 
+     * @param input the user's command input
+     * @return the response from processing the command
      */
     public String getResponse(String input) {
-        return "LeBron heard: " + input;
+        return sharedTaskManager.processCommand(input);
     }
 }
