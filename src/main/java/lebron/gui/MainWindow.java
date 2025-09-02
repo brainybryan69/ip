@@ -32,8 +32,8 @@ public class MainWindow extends AnchorPane {
     }
 
     /** Injects the Duke instance */
-    public void setLeBron(LeBron lebron) {
-        lebron = lebron;
+    public void setLeBron(LeBron bron) {
+        lebron = bron;
     }
 
     /**
