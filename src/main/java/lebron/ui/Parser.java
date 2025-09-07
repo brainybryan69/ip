@@ -28,6 +28,8 @@ public class Parser {
      * @throws LeBronException if the task number is invalid
      */
     public static int parseTaskNumber(String input, int commandLength) throws LeBronException {
+        assert input != null : "Input string cannot be null";
+        assert commandLength >= 0 : "Command length must be non-negative";
         try {
             String numberStr = input.substring(commandLength).trim();
             int taskNumber = Integer.parseInt(numberStr);
@@ -48,6 +50,7 @@ public class Parser {
      * @throws LeBronException if the description is empty
      */
     public static String parseTodoDescription(String input) throws LeBronException {
+        assert input != null : "Input string cannot be null";
         String description = input.length() > 4 ? input.substring(5).trim() : "";
         if (description.isEmpty()) {
             throw new LeBronException(ErrorType.EMPTY_TODO.getMessage());
@@ -76,6 +79,7 @@ public class Parser {
      * @throws LeBronException if format is invalid or components are missing
      */
     public static String[] parseDeadlineCommand(String input, String... errorMessages) throws LeBronException {
+        assert input != null : "Input string cannot be null";
         String emptyDeadlineMsg = errorMessages.length > 0 ? errorMessages[0] : ErrorType.EMPTY_DEADLINE.getMessage();
         String missingFormatMsg = errorMessages.length > 1 ? errorMessages[1] 
                 : ErrorType.MISSING_DEADLINE_FORMAT.getMessage();
@@ -119,6 +123,7 @@ public class Parser {
      * @throws LeBronException if format is invalid or components are missing
      */
     public static String[] parseEventCommand(String input, String... errorMessages) throws LeBronException {
+        assert input != null : "Input string cannot be null";
         String emptyEventMsg = errorMessages.length > 0 ? errorMessages[0] : ErrorType.EMPTY_EVENT.getMessage();
         String missingFormatMsg = errorMessages.length > 1 ? errorMessages[1] 
                 : ErrorType.MISSING_EVENT_FORMAT.getMessage();
@@ -153,6 +158,7 @@ public class Parser {
      * @throws LeBronException if the date is missing
      */
     public static String parseOnCommand(String input) throws LeBronException {
+        assert input != null : "Input string cannot be null";
         String dateString = input.length() > 2 ? input.substring(3).trim() : "";
         if (dateString.isEmpty()) {
             throw new LeBronException("Please specify a date. Use: on yyyy-mm-dd (e.g., on 2019-12-02)");
@@ -168,6 +174,7 @@ public class Parser {
      * @throws LeBronException if the keyword is missing
      */
     public static String parseFindCommand(String input) throws LeBronException {
+        assert input != null : "Input string cannot be null";
         String keyword = input.length() > 4 ? input.substring(5).trim() : "";
         if (keyword.isEmpty()) {
             throw new LeBronException("Please specify a keyword to search for. Use: find <keyword> (e.g., find book)");
