@@ -32,6 +32,7 @@ public class TaskList {
      * @param task the task to add
      */
     public void addTask(Task task) {
+        assert task != null : "Task cannot be null";
         tasks.add(task);
     }
 
@@ -43,6 +44,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if index is invalid
      */
     public Task deleteTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Task index must be within valid range";
         return tasks.remove(index);
     }
 
@@ -54,6 +56,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if index is invalid
      */
     public Task getTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Task index must be within valid range";
         return tasks.get(index);
     }
 
@@ -64,6 +67,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if index is invalid
      */
     public void markTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Task index must be within valid range";
         tasks.get(index).markAsDone();
     }
 
@@ -74,6 +78,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if index is invalid
      */
     public void unmarkTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Task index must be within valid range";
         tasks.get(index).markAsNotDone();
     }
 
@@ -112,6 +117,7 @@ public class TaskList {
      * @return a new TaskList containing matching tasks
      */
     public TaskList getTasksOnDate(LocalDate targetDate) {
+        assert targetDate != null : "Target date cannot be null";
         ArrayList<Task> matchingTasks = new ArrayList<>();
 
         for (Task task : tasks) {
@@ -142,6 +148,7 @@ public class TaskList {
      * @return a new TaskList containing matching tasks
      */
     public TaskList findTasksByKeyword(String keyword) {
+        assert keyword != null && !keyword.trim().isEmpty() : "Search keyword cannot be null or empty";
         ArrayList<Task> matchingTasks = new ArrayList<>();
         String lowerKeyword = keyword.toLowerCase();
 
