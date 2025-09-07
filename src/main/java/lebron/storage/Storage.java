@@ -25,6 +25,7 @@ public class Storage {
      * @param fileManager the file manager to use for storage operations
      */
     public Storage(FileManager fileManager) {
+        assert fileManager != null : "FileManager cannot be null";
         this.fileManager = fileManager;
     }
 
@@ -45,6 +46,7 @@ public class Storage {
      * @throws IOException if saving fails
      */
     public void save(ArrayList<Task> tasks) throws IOException {
+        assert tasks != null : "Task list cannot be null";
         fileManager.saveTasks(tasks);
     }
 
