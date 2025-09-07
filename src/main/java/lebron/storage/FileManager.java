@@ -42,7 +42,7 @@ public class FileManager {
      */
     public void saveTasks(ArrayList<Task> tasks) throws IOException {
         assert tasks != null : "Task list cannot be null";
-        // Create data directory if it doesn't exis
+        // Create data directory if it doesn't exist
         File dataDir = new File(DATA_DIR);
         if (!dataDir.exists()) {
             dataDir.mkdirs();
@@ -67,7 +67,7 @@ public class FileManager {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
 
-        // Return empty list if file doesn't exis
+        // Return empty list if file doesn't exist
         if (!file.exists()) {
             return tasks;
         }
