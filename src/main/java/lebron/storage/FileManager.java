@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import lebron.common.LeBronException;
 import lebron.task.Deadline;
@@ -48,9 +49,9 @@ public class FileManager {
         }
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
-            for (Task task : tasks) {
-                writer.println(taskToString(task));
-            }
+            tasks.stream()
+                .map(this::taskToString)
+                .forEach(writer::println);
         }
     }
 

@@ -2,6 +2,7 @@ package lebron.task;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Manages a collection of tasks with operations like add, delete, mark, and filter.
@@ -112,24 +113,21 @@ public class TaskList {
      * @return a new TaskList containing matching tasks
      */
     public TaskList getTasksOnDate(LocalDate targetDate) {
-        ArrayList<Task> matchingTasks = new ArrayList<>();
-
-        for (Task task : tasks) {
-            if (task instanceof Deadline) {
-                Deadline deadline = (Deadline) task;
-                if (deadline.getBy().toLocalDate().equals(targetDate)) {
-                    matchingTasks.add(task);
+        ArrayList<Task> matchingTasks = tasks.stream()
+            .filter(task -> {
+                if (task instanceof Deadline) {
+                    Deadline deadline = (Deadline) task;
+                    return deadline.getBy().toLocalDate().equals(targetDate);
+                } else if (task instanceof Event) {
+                    Event event = (Event) task;
+                    LocalDate eventStartDate = event.getFrom().toLocalDate();
+                    LocalDate eventEndDate = event.getTo().toLocalDate();
+                    // Include event if target date falls within or on the event's date range
+                    return !targetDate.isBefore(eventStartDate) && !targetDate.isAfter(eventEndDate);
                 }
-            } else if (task instanceof Event) {
-                Event event = (Event) task;
-                LocalDate eventStartDate = event.getFrom().toLocalDate();
-                LocalDate eventEndDate = event.getTo().toLocalDate();
-                // Include event if target date falls within or on the event's date range
-                if (!targetDate.isBefore(eventStartDate) && !targetDate.isAfter(eventEndDate)) {
-                    matchingTasks.add(task);
-                }
-            }
-        }
+                return false;
+            })
+            .collect(Collectors.toCollection(ArrayList::new));
 
         return new TaskList(matchingTasks);
     }
@@ -142,14 +140,11 @@ public class TaskList {
      * @return a new TaskList containing matching tasks
      */
     public TaskList findTasksByKeyword(String keyword) {
-        ArrayList<Task> matchingTasks = new ArrayList<>();
         String lowerKeyword = keyword.toLowerCase();
-
-        for (Task task : tasks) {
-            if (task.getDescription().toLowerCase().contains(lowerKeyword)) {
-                matchingTasks.add(task);
-            }
-        }
+        
+        ArrayList<Task> matchingTasks = tasks.stream()
+            .filter(task -> task.getDescription().toLowerCase().contains(lowerKeyword))
+            .collect(Collectors.toCollection(ArrayList::new));
 
         return new TaskList(matchingTasks);
     }
