@@ -77,7 +77,8 @@ public class Parser {
      */
     public static String[] parseDeadlineCommand(String input, String... errorMessages) throws LeBronException {
         String emptyDeadlineMsg = errorMessages.length > 0 ? errorMessages[0] : ErrorType.EMPTY_DEADLINE.getMessage();
-        String missingFormatMsg = errorMessages.length > 1 ? errorMessages[1] : ErrorType.MISSING_DEADLINE_FORMAT.getMessage();
+        String missingFormatMsg = errorMessages.length > 1 ? errorMessages[1] 
+                : ErrorType.MISSING_DEADLINE_FORMAT.getMessage();
         String remaining = input.length() > 8 ? input.substring(9) : "";
         if (remaining.trim().isEmpty()) {
             throw new LeBronException(emptyDeadlineMsg);
@@ -119,7 +120,8 @@ public class Parser {
      */
     public static String[] parseEventCommand(String input, String... errorMessages) throws LeBronException {
         String emptyEventMsg = errorMessages.length > 0 ? errorMessages[0] : ErrorType.EMPTY_EVENT.getMessage();
-        String missingFormatMsg = errorMessages.length > 1 ? errorMessages[1] : ErrorType.MISSING_EVENT_FORMAT.getMessage();
+        String missingFormatMsg = errorMessages.length > 1 ? errorMessages[1] 
+                : ErrorType.MISSING_EVENT_FORMAT.getMessage();
         String remaining = input.length() > 5 ? input.substring(6) : "";
         if (remaining.trim().isEmpty()) {
             throw new LeBronException(emptyEventMsg);
