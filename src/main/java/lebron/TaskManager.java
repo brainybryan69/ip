@@ -28,6 +28,11 @@ import lebron.ui.Ui;
  * Coordinates all components and handles the main program loop.
  */
 public class TaskManager {
+    
+    // Command length constants for parsing
+    private static final int MARK_COMMAND_LENGTH = 5;
+    private static final int UNMARK_COMMAND_LENGTH = 7;
+    private static final int DELETE_COMMAND_LENGTH = 7;
     private TaskList taskList;
     private Ui ui;
     private Storage storage;
@@ -136,13 +141,13 @@ public class TaskManager {
         case LIST:
             return new ListCommand();
         case MARK:
-            int markTaskNumber = Parser.parseTaskNumber(input, 5);
+            int markTaskNumber = Parser.parseTaskNumber(input, MARK_COMMAND_LENGTH);
             return new MarkCommand(markTaskNumber);
         case UNMARK:
-            int unmarkTaskNumber = Parser.parseTaskNumber(input, 7);
+            int unmarkTaskNumber = Parser.parseTaskNumber(input, UNMARK_COMMAND_LENGTH);
             return new UnmarkCommand(unmarkTaskNumber);
         case DELETE:
-            int deleteTaskNumber = Parser.parseTaskNumber(input, 7);
+            int deleteTaskNumber = Parser.parseTaskNumber(input, DELETE_COMMAND_LENGTH);
             return new DeleteCommand(deleteTaskNumber);
         case TODO:
             String todoDescription = Parser.parseTodoDescription(input);

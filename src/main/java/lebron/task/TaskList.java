@@ -33,6 +33,7 @@ public class TaskList {
      * @param task the task to add
      */
     public void addTask(Task task) {
+        assert task != null : "Task cannot be null";
         tasks.add(task);
     }
 
@@ -44,6 +45,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if index is invalid
      */
     public Task deleteTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Task index must be within valid range";
         return tasks.remove(index);
     }
 
@@ -55,6 +57,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if index is invalid
      */
     public Task getTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Task index must be within valid range";
         return tasks.get(index);
     }
 
@@ -65,6 +68,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if index is invalid
      */
     public void markTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Task index must be within valid range";
         tasks.get(index).markAsDone();
     }
 
@@ -75,6 +79,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if index is invalid
      */
     public void unmarkTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Task index must be within valid range";
         tasks.get(index).markAsNotDone();
     }
 
@@ -140,6 +145,7 @@ public class TaskList {
      * @return a new TaskList containing matching tasks
      */
     public TaskList findTasksByKeyword(String keyword) {
+
         String lowerKeyword = keyword.toLowerCase();
         
         ArrayList<Task> matchingTasks = tasks.stream()

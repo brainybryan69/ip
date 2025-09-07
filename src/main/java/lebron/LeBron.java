@@ -8,16 +8,16 @@ package lebron;
  * and LeBron will help you stay organized!
  */
 public class LeBron {
-    private static TaskManager sharedTaskManager = new TaskManager();
+    private static final TaskManager SHARED_TASK_MANAGER = new TaskManager();
 
     /**
      * Starts the LeBron task manager.
-     * Creates a TaskManager instance and runs the application.
+     * Uses the shared TaskManager instance for consistency.
      *
      * @param args command line arguments (not used)
      */
     public static void main(String[] args) {
-        new TaskManager().run();
+        SHARED_TASK_MANAGER.run();
     }
 
     /**
@@ -28,6 +28,6 @@ public class LeBron {
      * @return the response from processing the command
      */
     public String getResponse(String input) {
-        return sharedTaskManager.processCommand(input);
+        return SHARED_TASK_MANAGER.processCommand(input);
     }
 }

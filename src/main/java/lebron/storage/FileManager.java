@@ -42,7 +42,8 @@ public class FileManager {
      * @throws IOException if something goes wrong with file writing
      */
     public void saveTasks(ArrayList<Task> tasks) throws IOException {
-        // Create data directory if it doesn't exis
+        assert tasks != null : "Task list cannot be null";
+        // Create data directory if it doesn't exist
         File dataDir = new File(DATA_DIR);
         if (!dataDir.exists()) {
             dataDir.mkdirs();
@@ -67,7 +68,7 @@ public class FileManager {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
 
-        // Return empty list if file doesn't exis
+        // Return empty list if file doesn't exist
         if (!file.exists()) {
             return tasks;
         }
@@ -162,6 +163,7 @@ public class FileManager {
             logWarning("Line %d has too few fields - expected at least 3, got %d", lineNumber, parts.length);
             return null;
         }
+        assert parts.length >= 3 : "Parser validation should have caught this";
 
         String type = parts[0];
         String statusStr = parts[1];
@@ -209,6 +211,7 @@ public class FileManager {
                 }
                 try {
                     LocalDateTime dateTime = DateTimeParser.parseFromStorage(by);
+                    assert dateTime != null : "DateTimeParser should not return null for valid input";
                     task = new Deadline(description, dateTime);
                 } catch (LeBronException e) {
                     logWarning("Line %d - Invalid date format in deadline: %s", lineNumber, e.getMessage());
@@ -229,6 +232,7 @@ public class FileManager {
                 try {
                     LocalDateTime fromDateTime = DateTimeParser.parseFromStorage(from);
                     LocalDateTime toDateTime = DateTimeParser.parseFromStorage(to);
+                    assert fromDateTime != null && toDateTime != null : "DateTimeParser should not return null for valid input";
                     task = new Event(description, fromDateTime, toDateTime);
                 } catch (LeBronException e) {
                     logWarning("Line %d - Invalid date format in event: %s", lineNumber, e.getMessage());
