@@ -37,7 +37,7 @@ public enum CommandType {
     public static CommandType parseCommand(String input) {
         if (input.equals("bye")) {
             return BYE;
-        } else if (input.equals("list")) {
+        } else if (input.equals("list") || input.startsWith("list ")) {
             return LIST;
         } else if (input.startsWith("mark ")) {
             return MARK;

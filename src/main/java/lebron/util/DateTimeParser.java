@@ -102,4 +102,35 @@ public class DateTimeParser {
             throw new LeBronException("Invalid date format. Use yyyy-mm-dd (e.g., 2019-12-02)");
         }
     }
+
+    /**
+     * Parses a date string in DD MM YYYY format into a LocalDate object.
+     * Accepts format: DD MM YYYY (e.g., "12 02 2022")
+     *
+     * @param dateString the date string to parse
+     * @return the parsed LocalDate
+     * @throws LeBronException if the format is invalid
+     */
+    public static LocalDate parseDateFromDDMMYYYY(String dateString) throws LeBronException {
+        if (dateString == null || dateString.trim().isEmpty()) {
+            throw new LeBronException("Date cannot be empty");
+        }
+
+        String[] parts = dateString.trim().split("\\s+");
+        if (parts.length != 3) {
+            throw new LeBronException("Invalid date format. Use DD MM YYYY (e.g., 12 02 2022)");
+        }
+
+        try {
+            int day = Integer.parseInt(parts[0]);
+            int month = Integer.parseInt(parts[1]);
+            int year = Integer.parseInt(parts[2]);
+
+            return LocalDate.of(year, month, day);
+        } catch (NumberFormatException e) {
+            throw new LeBronException("Invalid date format. Use DD MM YYYY (e.g., 12 02 2022)");
+        } catch (Exception e) {
+            throw new LeBronException("Invalid date. Please check the day, month, and year values.");
+        }
+    }
 }

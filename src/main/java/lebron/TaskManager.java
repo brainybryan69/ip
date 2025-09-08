@@ -139,7 +139,12 @@ public class TaskManager {
         case BYE:
             return new ExitCommand();
         case LIST:
-            return new ListCommand();
+            if (input.equals("list")) {
+                return new ListCommand();
+            } else {
+                String dateString = Parser.parseListDateCommand(input);
+                return new ListCommand(dateString);
+            }
         case MARK:
             int markTaskNumber = Parser.parseTaskNumber(input, MARK_COMMAND_LENGTH);
             return new MarkCommand(markTaskNumber);

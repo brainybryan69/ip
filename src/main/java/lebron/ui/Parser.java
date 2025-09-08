@@ -181,4 +181,45 @@ public class Parser {
         }
         return keyword;
     }
+
+    /**
+     * Extracts date from a "list DD MM YYYY" command.
+     *
+     * @param input the user input (e.g., "list 12 02 2022")
+     * @return the date string in DD MM YYYY format
+     * @throws LeBronException if the date format is invalid
+     */
+    public static String parseListDateCommand(String input) throws LeBronException {
+        assert input != null : "Input string cannot be null";
+        String dateString = input.length() > 4 ? input.substring(5).trim() : "";
+        if (dateString.isEmpty()) {
+            throw new LeBronException("Please specify a date. Use: list DD MM YYYY (e.g., list 12 02 2022)");
+        }
+        
+        // Validate the date format (DD MM YYYY)
+        String[] parts = dateString.split("\\s+");
+        if (parts.length != 3) {
+            throw new LeBronException("Invalid date format. Use: list DD MM YYYY (e.g., list 12 02 2022)");
+        }
+        
+        try {
+            int day = Integer.parseInt(parts[0]);
+            int month = Integer.parseInt(parts[1]);
+            int year = Integer.parseInt(parts[2]);
+            
+            if (day < 1 || day > 31) {
+                throw new LeBronException("Invalid day. Day must be between 1 and 31.");
+            }
+            if (month < 1 || month > 12) {
+                throw new LeBronException("Invalid month. Month must be between 1 and 12.");
+            }
+            if (year < 1000 || year > 9999) {
+                throw new LeBronException("Invalid year. Year must be a 4-digit number.");
+            }
+        } catch (NumberFormatException e) {
+            throw new LeBronException("Invalid date format. Use: list DD MM YYYY (e.g., list 12 02 2022)");
+        }
+        
+        return dateString;
+    }
 }
