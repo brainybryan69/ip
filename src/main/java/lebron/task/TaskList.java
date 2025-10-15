@@ -45,7 +45,9 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if index is invalid
      */
     public Task deleteTask(int index) {
-        assert index >= 0 && index < tasks.size() : "Task index must be within valid range";
+        if (index < 0 || index >= tasks.size()) {
+            throw new IndexOutOfBoundsException("Task index must be within valid range");
+        }
         return tasks.remove(index);
     }
 
@@ -57,7 +59,9 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if index is invalid
      */
     public Task getTask(int index) {
-        assert index >= 0 && index < tasks.size() : "Task index must be within valid range";
+        if (index < 0 || index >= tasks.size()) {
+            throw new IndexOutOfBoundsException("Task index must be within valid range");
+        }
         return tasks.get(index);
     }
 
@@ -68,7 +72,9 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if index is invalid
      */
     public void markTask(int index) {
-        assert index >= 0 && index < tasks.size() : "Task index must be within valid range";
+        if (index < 0 || index >= tasks.size()) {
+            throw new IndexOutOfBoundsException("Task index must be within valid range");
+        }
         tasks.get(index).markAsDone();
     }
 
@@ -79,7 +85,9 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if index is invalid
      */
     public void unmarkTask(int index) {
-        assert index >= 0 && index < tasks.size() : "Task index must be within valid range";
+        if (index < 0 || index >= tasks.size()) {
+            throw new IndexOutOfBoundsException("Task index must be within valid range");
+        }
         tasks.get(index).markAsNotDone();
     }
 
