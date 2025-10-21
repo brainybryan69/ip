@@ -28,6 +28,10 @@ public class EventTest {
         assertNotNull(event.getTo());
     }
 
+    /**
+     * Tester
+     */
+
     @Test
     public void testEventCreationWithLocalDateTime() {
         LocalDateTime start = LocalDateTime.of(2024, 12, 25, 14, 0);
