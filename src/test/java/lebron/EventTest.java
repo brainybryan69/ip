@@ -14,10 +14,7 @@ import lebron.common.LeBronException;
 import lebron.task.Event;
 
 public class EventTest {
-
-    /**
-     * Tester
-     */
+    
 
     @Test
     public void testEventCreationWithStrings() throws LeBronException {
@@ -27,10 +24,6 @@ public class EventTest {
         assertNotNull(event.getFrom());
         assertNotNull(event.getTo());
     }
-
-    /**
-     * Tester
-     */
 
     @Test
     public void testEventCreationWithLocalDateTime() {
