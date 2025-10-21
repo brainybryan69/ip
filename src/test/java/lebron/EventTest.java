@@ -15,6 +15,10 @@ import lebron.task.Event;
 
 public class EventTest {
 
+    /**
+     * Tester
+     */
+
     @Test
     public void testEventCreationWithStrings() throws LeBronException {
         Event event = new Event("Team meeting", "2024-12-25 1400", "2024-12-25 1600");
