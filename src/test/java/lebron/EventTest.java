@@ -15,9 +15,7 @@ import lebron.task.Event;
 
 public class EventTest {
 
-    /**
-     * Tester
-     */
+    
 
     @Test
     public void testEventCreationWithStrings() throws LeBronException {
