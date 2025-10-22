@@ -1,4 +1,5 @@
 package lebron.common;
+
 /**
  * The different types of tasks you can create.
  * Each type has its own icon for easy identification.
