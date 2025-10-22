@@ -1,6 +1,7 @@
 package lebron.task;
 
 import lebron.common.TaskType;
+
 /**
  * A simple task without any deadlines or time constraints.
  * Just something you need to get done whenever you have time.
