@@ -15,7 +15,7 @@ public abstract class Task {
      * Creates a new task with the given description.
      * The task starts as not done.
      *
-     * @param description what the task is abou
+     * @param description what the task is about
      * @param type the kind of task (todo, deadline, or event)
      */
     public Task(String description, TaskType type) {
