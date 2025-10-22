@@ -17,7 +17,7 @@ public class Event extends Task {
     /**
      * Creates a new event task with date/time strings.
      *
-     * @param description what the event is abou
+     * @param description what the event is about
      * @param fromString when the event starts (format: yyyy-mm-dd HHmm)
      * @param toString when the event ends (format: yyyy-mm-dd HHmm)
      * @throws LeBronException if the date formats are invalid
